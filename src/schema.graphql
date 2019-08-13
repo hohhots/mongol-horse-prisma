@@ -1,0 +1,81 @@
+type Query {
+  bookList(
+    filter: String
+    skip: Int
+    first: Int
+    orderBy: BookOrderByInput
+  ): BookList!
+}
+
+type Mutation {
+  newBook(
+    enable: Boolean!
+    name: String!
+    Author: String!
+    publishedAt: String!
+    preview: String!
+  ): Book!
+
+  updateBook(
+    enable: Boolean!
+    name: String!
+    Author: String!
+    publishedAt: String!
+    preview: String!
+  ): Book!
+
+  newPage(pageNum: Int!, content: String!): Page!
+
+  updatePag(pageNum: Int!, content: String!): Page!
+
+  login(email: String!, password: String!): AuthPayload
+}
+
+type BookList {
+  books: [Book!]!
+  count: Int!
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
+enum BookOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type User {
+  id: ID!
+  createdAt: DateTime!
+  books: [Book!]!
+  pages: [Page!]!
+
+  name: String!
+  email: String!
+  password: String!
+}
+
+type Book {
+  id: ID!
+  createdAt: DateTime!
+  postedBy: User!
+  pages: [Page!]!
+
+  enable: Boolean!
+  name: String!
+  Author: String!
+  publishedAt: String!
+  preview: String!
+}
+
+type Page {
+  id: ID!
+  createdAt: DateTime!
+  book: Book!
+  postedBy: User!
+
+  pageNum: Int!
+  content: String!
+}

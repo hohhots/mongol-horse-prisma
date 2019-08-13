@@ -1,0 +1,33 @@
+type User {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  books: [Book!]!
+  pages: [Page!]!
+
+  name: String!
+  email: String! @unique
+  password: String!
+}
+
+type Book {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  postedBy: User! @relation(link: INLINE)
+  pages: [Page!]!
+
+  enable: Boolean!
+  name: String!
+  Author: String!
+  publishedAt: String!
+  preview: String! @unique
+}
+
+type Page {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  book: Book! @relation(link: INLINE)
+  postedBy: User! @relation(link: INLINE)
+
+  pageNum: Int!
+  content: String! @unique
+}
