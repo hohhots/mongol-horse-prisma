@@ -12,12 +12,12 @@ type User {
 type Book {
   id: ID! @id
   createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
   postedBy: User! @relation(link: INLINE)
   pages: [Page!]!
 
-  enable: Boolean!
-  name: String!
-  Author: String!
+  title: String!
+  author: String!
   publishedAt: String!
   preview: String! @unique
 }
@@ -25,6 +25,7 @@ type Book {
 type Page {
   id: ID! @id
   createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
   book: Book! @relation(link: INLINE)
   postedBy: User! @relation(link: INLINE)
 

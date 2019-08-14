@@ -5,34 +5,47 @@ type Query {
     first: Int
     orderBy: BookOrderByInput
   ): BookList!
+
+  pageList(
+    filter: String
+    skip: Int
+    first: Int
+    orderBy: PageOrderByInput
+  ): PageList!
 }
 
 type Mutation {
   newBook(
-    enable: Boolean!
-    name: String!
-    Author: String!
+    title: String!
+    author: String!
     publishedAt: String!
     preview: String!
   ): Book!
 
   updateBook(
-    enable: Boolean!
-    name: String!
-    Author: String!
+    title: String!
+    author: String!
     publishedAt: String!
     preview: String!
+    bookId: String!
   ): Book!
 
-  newPage(pageNum: Int!, content: String!): Page!
+  newPage(pageNum: Int!, content: String!, bookId: String!): Page!
 
-  updatePag(pageNum: Int!, content: String!): Page!
+  updatePage(pageNum: Int!, content: String!, pageId: String!): Page!
+
+  signup(email: String!, password: String!, name: String!): AuthPayload
 
   login(email: String!, password: String!): AuthPayload
 }
 
 type BookList {
   books: [Book!]!
+  count: Int!
+}
+
+type PageList {
+  pages: [Page!]!
   count: Int!
 }
 
@@ -46,9 +59,14 @@ enum BookOrderByInput {
   createdAt_DESC
 }
 
+enum PageOrderByInput {
+  pageNum_ASC
+  pageNum_DESC
+}
+
 type User {
   id: ID!
-  createdAt: DateTime!
+  createdAt: String!
   books: [Book!]!
   pages: [Page!]!
 
@@ -59,20 +77,21 @@ type User {
 
 type Book {
   id: ID!
-  createdAt: DateTime!
+  createdAt: String!
+  updatedAt: String!
   postedBy: User!
   pages: [Page!]!
 
-  enable: Boolean!
-  name: String!
-  Author: String!
+  title: String!
+  author: String!
   publishedAt: String!
   preview: String!
 }
 
 type Page {
   id: ID!
-  createdAt: DateTime!
+  createdAt: String!
+  updatedAt: String!
   book: Book!
   postedBy: User!
 
