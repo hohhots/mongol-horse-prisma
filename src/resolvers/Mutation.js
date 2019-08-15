@@ -65,7 +65,7 @@ async function signup(_, args, context) {
   };
 }
 
-async function login(parent, args, context) {
+async function login(_, args, context) {
   const user = await context.prisma.user({ email: args.email });
   if (!user) {
     throw new Error('No such user found');
