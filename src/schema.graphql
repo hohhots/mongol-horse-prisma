@@ -12,6 +12,8 @@ type Query {
     first: Int
     orderBy: PageOrderByInput
   ): PageList!
+
+  book(bookId: ID!): Book
 }
 
 type Mutation {

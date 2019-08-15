@@ -1,3 +1,7 @@
+async function book(parent, args, context) {
+  return await context.prisma.book({ id: args.bookId });
+}
+
 async function bookList(parent, args, context) {
   const where = args.filter
     ? {
@@ -52,6 +56,7 @@ async function pageList(parent, args, context) {
 }
 
 module.exports = {
+  book,
   bookList,
   pageList,
 };
