@@ -1,6 +1,36 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { createWriteStream } = require('fs');
+const mkdirp = require('mkdirp');
+
 const { APP_SECRET, getUserId } = require('../utils');
+
+const uploadDir = './booksImage';
+
+// Ensure upload directory exists
+mkdirp.sync(uploadDir);
+
+const storeUpload = async ({ stream, bookId, pageId }) => {
+  mkdirp.sync(`${uploadDir}/${bookId}`);
+  const path = `${uploadDir}/${bookId}/${pageId}`;
+  return new Promise((resolve, reject) =>
+    stream
+      .pipe(createWriteStream(path))
+      .on('finish', () => resolve({ pageId, path }))
+      .on('error', reject),
+  );
+};
+
+const processUpload = async (upload, bookId, pageId) => {
+  const { createReadStream, mimetype, encoding } = await upload;
+  const stream = createReadStream();
+  const { id, path } = await storeUpload({
+    stream,
+    bookId,
+    pageId,
+  });
+  return { id, bookId, pageId, mimetype, encoding, path };
+};
 
 function newBook(_, args, context) {
   const userId = getUserId(context);
@@ -84,6 +114,10 @@ async function login(_, args, context) {
   };
 }
 
+async function uploadFile(_, { file, bookId, pageId }) {
+  return processUpload(file, bookId, pageId);
+}
+
 module.exports = {
   signup,
   login,
@@ -91,4 +125,5 @@ module.exports = {
   updateBook,
   newPage,
   updatePage,
+  uploadFile,
 };

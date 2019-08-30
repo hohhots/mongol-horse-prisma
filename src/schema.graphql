@@ -39,6 +39,18 @@ type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload
 
   login(email: String!, password: String!): AuthPayload
+
+  uploadFile(file: Upload!, bookDir: String!, imgName: String!): File!
+}
+
+scalar Upload
+
+type File {
+  id: ID!
+  path: String!
+  filename: String!
+  mimetype: String!
+  encoding: String!
 }
 
 type BookList {
