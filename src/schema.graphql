@@ -40,7 +40,7 @@ type Mutation {
 
   login(email: String!, password: String!): AuthPayload
 
-  uploadFile(file: Upload!, bookDir: String!, imgName: String!): File!
+  uploadFile(file: Upload!, bookId: String!, pageId: String!): File!
 }
 
 scalar Upload
