@@ -10,9 +10,11 @@ const uploadDir = './booksImage';
 // Ensure upload directory exists
 mkdirp.sync(uploadDir);
 
-const storeUpload = async ({ stream, bookId, pageId }) => {
-  mkdirp.sync(`${uploadDir}/${bookId}`);
-  const path = `${uploadDir}/${bookId}/${pageId}`;
+const storeUpload = async ({ stream, mimetype, bookId, pageId }) => {
+  mimetype = mimetype.split('/')[1];
+  let path = `${uploadDir}/${bookId}`;
+  mkdirp.sync(path);
+  path = `${path}/${pageId}.${mimetype}`;
   return new Promise((resolve, reject) =>
     stream
       .pipe(createWriteStream(path))
@@ -21,15 +23,16 @@ const storeUpload = async ({ stream, bookId, pageId }) => {
   );
 };
 
-const processUpload = async (upload, bookId, pageId) => {
-  const { createReadStream, mimetype, encoding } = await upload;
+const processUpload = async (photo, bookId, pageId) => {
+  const { createReadStream, filename, mimetype, encoding } = await photo;
   const stream = createReadStream();
-  const { id, path } = await storeUpload({
+  const { id } = await storeUpload({
     stream,
+    mimetype,
     bookId,
     pageId,
   });
-  return { id, bookId, pageId, mimetype, encoding, path };
+  return { id, filename, mimetype, encoding, bookId, pageId };
 };
 
 function newBook(_, args, context) {
@@ -114,7 +117,8 @@ async function login(_, args, context) {
   };
 }
 
-async function uploadFile(_, { file, bookId, pageId }) {
+async function uploadFile(_, { file, bookId, pageId }, context) {
+  getUserId(context);
   return processUpload(file, bookId, pageId);
 }
 
