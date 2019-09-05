@@ -117,7 +117,7 @@ async function login(_, args, context) {
   };
 }
 
-async function uploadFile(_, { file, bookId, pageId }, context) {
+async function uploadPhoto(_, { file, bookId, pageId }, context) {
   getUserId(context);
   return processUpload(file, bookId, pageId);
 }
@@ -129,5 +129,5 @@ module.exports = {
   updateBook,
   newPage,
   updatePage,
-  uploadFile,
+  uploadPhoto,
 };
