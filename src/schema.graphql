@@ -107,6 +107,7 @@ type Page {
   updatedAt: String!
   book: Book!
   postedBy: User!
+  imageType: String
 
   pageNum: Int!
   content: String!

@@ -3,9 +3,7 @@ const jwt = require('jsonwebtoken');
 const { createWriteStream } = require('fs');
 const mkdirp = require('mkdirp');
 
-const { APP_SECRET, getUserId } = require('../utils');
-
-const uploadDir = './booksImage';
+const { APP_SECRET, getUserId, uploadDir } = require('../utils');
 
 // Ensure upload directory exists
 mkdirp.sync(uploadDir);
