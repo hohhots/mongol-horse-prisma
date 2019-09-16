@@ -1,4 +1,8 @@
 type Query {
+  page(pageId: ID!): Page
+
+  book(bookId: ID!): Book
+
   bookList(
     filter: String
     skip: Int
@@ -12,8 +16,6 @@ type Query {
     first: Int
     orderBy: PageOrderByInput
   ): PageList!
-
-  book(bookId: ID!): Book
 }
 
 type Mutation {
