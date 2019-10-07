@@ -1,12 +1,44 @@
+const glob = require('glob');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { createWriteStream } = require('fs');
+const { unlink, createWriteStream } = require('fs');
 const mkdirp = require('mkdirp');
 
 const { APP_SECRET, getUserId, uploadDir } = require('../utils');
 
 // Ensure upload directory exists
 mkdirp.sync(uploadDir);
+
+const deletePrevious = ({ stream, mimetype, bookId, pageId }) => {
+  let imageid = '';
+
+  const file = `${uploadDir}/${bookId}/${pageId}.*`;
+  glob(file, function(err, files) {
+    if (err) {
+      console.log(err);
+    } else {
+      // a list of paths to javaScript files in the current working directory
+      console.log(files);
+      files.map(
+        async (file) =>
+          await unlink(file, (err) => {
+            if (err) throw err;
+            // if no error, file has been deleted successfully
+            console.log('File deleted!');
+          }),
+      );
+      const { id } = storeUpload({
+        stream,
+        mimetype,
+        bookId,
+        pageId,
+      });
+      imageid = id;
+    }
+  });
+
+  return { id: imageid };
+};
 
 const storeUpload = async ({ stream, mimetype, bookId, pageId }) => {
   mimetype = mimetype.split('/')[1];
@@ -24,7 +56,7 @@ const storeUpload = async ({ stream, mimetype, bookId, pageId }) => {
 const processUpload = async (photo, bookId, pageId) => {
   const { createReadStream, filename, mimetype, encoding } = await photo;
   const stream = createReadStream();
-  const { id } = await storeUpload({
+  const { id } = await deletePrevious({
     stream,
     mimetype,
     bookId,
