@@ -2,7 +2,7 @@ const fs = require('fs');
 
 const jwt = require('jsonwebtoken');
 const APP_SECRET = '^3Mongol-6Horse*';
-const image_types = ['png', 'jpg'];
+const image_types = ['png', 'jpeg'];
 const uploadDir = './booksImage';
 
 function getUserId(context) {
@@ -18,12 +18,13 @@ function getUserId(context) {
 
 function getFileType(bookid, pageid) {
   let imageType = '';
-  for (let i = 0; i < image_types.length; i++) {
-    const path = `${uploadDir}/${bookid}/${pageid}.${image_types[i]}`;
-    if (fs.existsSync(path)) {
-      imageType = image_types[i];
+  image_types.some((type) => {
+    if (fs.existsSync(`${uploadDir}/${bookid}/${pageid}.${type}`)) {
+      imageType = type;
+      return true;
     }
-  }
+    return false;
+  });
   return imageType;
 }
 
