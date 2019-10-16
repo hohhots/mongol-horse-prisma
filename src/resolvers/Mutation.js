@@ -9,11 +9,9 @@ const { APP_SECRET, getUserId, uploadDir } = require('../utils');
 // Ensure upload directory exists
 mkdirp.sync(uploadDir);
 
-const deletePrevious = async ({ stream, mimetype, bookId, pageId }) => {
-  let imageid = '';
-
+const deletePrevious = ({ bookId, pageId }) => {
   const file = `${uploadDir}/${bookId}/${pageId}.*`;
-  glob(file, async function(err, files) {
+  glob(file, function(err, files) {
     if (err) {
       console.log(err);
     } else {
@@ -27,17 +25,8 @@ const deletePrevious = async ({ stream, mimetype, bookId, pageId }) => {
             console.log('File deleted!');
           }),
       );
-      const { id } = await storeUpload({
-        stream,
-        mimetype,
-        bookId,
-        pageId,
-      });
-      imageid = id;
     }
   });
-
-  return { id: imageid };
 };
 
 const storeUpload = async ({ stream, mimetype, bookId, pageId }) => {
@@ -54,9 +43,11 @@ const storeUpload = async ({ stream, mimetype, bookId, pageId }) => {
 };
 
 const processUpload = async (photo, bookId, pageId) => {
+  deletePrevious({ bookId, pageId });
+
   const { createReadStream, filename, mimetype, encoding } = await photo;
   const stream = createReadStream();
-  const { id } = await deletePrevious({
+  const { id } = await storeUpload({
     stream,
     mimetype,
     bookId,
