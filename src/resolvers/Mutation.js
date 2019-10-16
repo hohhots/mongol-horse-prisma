@@ -9,11 +9,11 @@ const { APP_SECRET, getUserId, uploadDir } = require('../utils');
 // Ensure upload directory exists
 mkdirp.sync(uploadDir);
 
-const deletePrevious = ({ stream, mimetype, bookId, pageId }) => {
+const deletePrevious = async ({ stream, mimetype, bookId, pageId }) => {
   let imageid = '';
 
   const file = `${uploadDir}/${bookId}/${pageId}.*`;
-  glob(file, function(err, files) {
+  glob(file, async function(err, files) {
     if (err) {
       console.log(err);
     } else {
@@ -27,7 +27,7 @@ const deletePrevious = ({ stream, mimetype, bookId, pageId }) => {
             console.log('File deleted!');
           }),
       );
-      const { id } = storeUpload({
+      const { id } = await storeUpload({
         stream,
         mimetype,
         bookId,
