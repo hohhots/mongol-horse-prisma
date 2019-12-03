@@ -10,23 +10,14 @@ const { APP_SECRET, getUserId, uploadDir } = require('../utils');
 mkdirp.sync(uploadDir);
 
 const deletePrevious = ({ bookId, pageId }) => {
-  const file = `${uploadDir}/${bookId}/${pageId}.*`;
-  glob(file, function(err, files) {
-    if (err) {
-      console.log(err);
-    } else {
-      // a list of paths to javaScript files in the current working directory
-      console.log(files);
-      files.map(
-        async (file) =>
-          await unlink(file, (err) => {
-            if (err) throw err;
-            // if no error, file has been deleted successfully
-            console.log('File deleted!');
-          }),
-      );
-    }
-  });
+  const files = glob.sync(`${uploadDir}/${bookId}/${pageId}.*`);
+  files.map((file) =>
+    unlink(file, (err) => {
+      if (err) throw err;
+      // if no error, file has been deleted successfully
+      console.log('File deleted!');
+    }),
+  );
 };
 
 const storeUpload = async ({ stream, mimetype, bookId, pageId }) => {
@@ -37,7 +28,9 @@ const storeUpload = async ({ stream, mimetype, bookId, pageId }) => {
   return new Promise((resolve, reject) =>
     stream
       .pipe(createWriteStream(path))
-      .on('finish', () => resolve({ pageId, path }))
+      .on('finish', () => {
+        resolve({ pageId, path });
+      })
       .on('error', reject),
   );
 };
