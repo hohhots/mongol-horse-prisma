@@ -78,6 +78,18 @@ function updateBook(_, args, context) {
 
 function newPage(_, args, context) {
   const userId = getUserId(context);
+  args.updatePages.map(async (page) => {
+    const where = {
+      id: page.id,
+    };
+    await context.prisma.updatePage({
+      data: {
+        pageNum: page.pageNum,
+      },
+      where,
+    });
+  });
+
   return context.prisma.createPage({
     pageNum: args.pageNum,
     content: args.content,

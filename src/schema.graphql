@@ -34,7 +34,12 @@ type Mutation {
     bookId: String!
   ): Book!
 
-  newPage(pageNum: Int!, content: String!, bookId: String!): Page!
+  newPage(
+    pageNum: Int!
+    content: String!
+    bookId: String!
+    updatePages: [Object]!
+  ): Page!
 
   updatePage(pageNum: Int!, content: String!, pageId: String!): Page!
 
@@ -46,6 +51,7 @@ type Mutation {
 }
 
 scalar Upload
+scalar Object
 
 type File {
   id: ID!
