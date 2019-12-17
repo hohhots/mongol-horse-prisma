@@ -100,15 +100,21 @@ function newPage(_, args, context) {
 
 function updatePage(_, args, context) {
   getUserId(context);
-  const where = {
-    id: args.pageId,
-  };
+  args.updatePages.map(async (page) => {
+    await context.prisma.updatePage({
+      data: {
+        pageNum: page.pageNum,
+      },
+      where: { id: page.id },
+    });
+  });
+
   return context.prisma.updatePage({
     data: {
       pageNum: args.pageNum,
       content: args.content,
     },
-    where,
+    where: { id: args.pageId },
   });
 }
 

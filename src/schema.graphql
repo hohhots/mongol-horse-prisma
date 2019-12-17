@@ -41,7 +41,12 @@ type Mutation {
     updatePages: [Object]!
   ): Page!
 
-  updatePage(pageNum: Int!, content: String!, pageId: String!): Page!
+  updatePage(
+    pageNum: Int!
+    content: String!
+    pageId: String!
+    updatePages: [Object]!
+  ): Page!
 
   signup(email: String!, password: String!, name: String!): AuthPayload
 
