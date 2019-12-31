@@ -9,13 +9,6 @@ type Query {
     first: Int
     orderBy: BookOrderByInput
   ): BookList!
-
-  pageList(
-    filter: String
-    skip: Int
-    first: Int
-    orderBy: PageOrderByInput
-  ): PageList!
 }
 
 type Mutation {
@@ -67,11 +60,6 @@ type File {
 
 type BookList {
   books: [Book!]!
-  count: Int!
-}
-
-type PageList {
-  pages: [Page!]!
   count: Int!
 }
 
