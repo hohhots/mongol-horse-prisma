@@ -3,7 +3,9 @@ type Query {
 
   book(bookId: ID!): Book
 
-  bookList(
+  bookList(skip: Int, first: Int, orderBy: BookOrderByInput): BookList!
+
+  bookFilterList(
     filter: String
     skip: Int
     first: Int
